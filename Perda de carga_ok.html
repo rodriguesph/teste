@@ -1,0 +1,822 @@
+	<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-book: Perda de Carga em Sistemas Hidráulicos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Configurações Gerais e Tema "Água" --- */
+        :root {
+            --cor-primaria: #0077be; /* Azul forte */
+            --cor-secundaria: #4dabf7; /* Azul claro */
+            --cor-fundo: #f0f8ff; /* Azul muito claro (Alice Blue) */
+            --cor-texto: #333;
+            --cor-texto-claro: #555;
+            --cor-branco: #ffffff;
+            --cor-codigo: #e83e8c;
+            --sombra-suave: 0 4px 15px rgba(0, 119, 190, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto-claro);
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* --- Cabeçalho (Hero Section) com Onda --- */
+        .hero {
+            background-color: var(--cor-primaria);
+            color: var(--cor-branco);
+            padding: 80px 20px 140px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,23.5V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z' style='fill:%23f0f8ff;'%3E%3C/path%3E%3C/svg%3E");
+            background-size: cover;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        /* --- Navegação Interativa (Índice) --- */
+        .toc-nav {
+            background-color: var(--cor-branco);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--sombra-suave);
+            margin-top: -80px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .toc-nav h2 {
+            text-align: center;
+            color: var(--cor-primaria);
+            margin-bottom: 25px;
+        }
+
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            list-style: none;
+        }
+
+        .toc-grid li a {
+            display: block;
+            background-color: var(--cor-fundo);
+            color: var(--cor-primaria);
+            padding: 15px 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            border-left: 5px solid var(--cor-secundaria);
+            transition: all 0.3s ease;
+        }
+
+        .toc-grid li a:hover {
+            background-color: var(--cor-secundaria);
+            color: var(--cor-branco);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(77, 171, 247, 0.3);
+        }
+
+        /* --- Seções de Conteúdo --- */
+        .content-section {
+            padding-top: 70px; /* Espaço para o ID do link não ficar sob o header */
+            margin-top: -40px; /* Compensa o padding para alinhar com o scroll */
+            margin-bottom: 20px;
+            background-color: var(--cor-branco);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: var(--sombra-suave);
+        }
+
+        .content-section h2 {
+            font-size: 1.8rem;
+            color: var(--cor-primaria);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--cor-secundaria);
+        }
+        
+        .content-section h3 {
+            font-size: 1.4rem;
+            color: #2c5c85;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        .content-section h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--cor-texto);
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .content-section p, .content-section ul {
+            margin-bottom: 15px;
+        }
+
+        .content-section ul {
+            padding-left: 20px;
+            list-style-type: '💧 ';
+        }
+        
+        .content-section ul ul {
+             list-style-type: '✅ ';
+        }
+
+        .highlight-box {
+            background-color: #e7f5ff;
+            border-left: 5px solid var(--cor-secundaria);
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        pre, code {
+            font-family: 'Roboto Mono', monospace;
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--cor-codigo);
+        }
+        
+        pre {
+            padding: 20px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #333;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin: 25px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        
+        table th, table td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+        
+        table th {
+            background-color: var(--cor-secundaria);
+            color: var(--cor-branco);
+            font-weight: 700;
+        }
+        
+        table tbody tr:nth-of-type(even) {
+            background-color: var(--cor-fundo);
+        }
+
+        /* --- Rodapé --- */
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+            background-color: #d4eaf7;
+            color: var(--cor-primaria);
+            font-weight: 700;
+        }
+        
+        /* --- Responsividade --- */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .hero p {
+                font-size: 1rem;
+            }
+            .content-section {
+                padding: 20px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1>E-BOOK: PERDA DE CARGA EM SISTEMAS HIDRÁULICOS PREDIAIS</h1>
+            <p>Baseado na NBR 5626:1998 - Método dos Comprimentos Equivalentes</p>
+	    <p>Prof. Paulo Rodrigues</p>
+        </div>
+    </header>
+
+    <main>
+        <nav class="container">
+            <div class="toc-nav">
+                <h2>Sumário Interativo 💧</h2>
+                <ul class="toc-grid">
+                    <li><a href="#introducao">Introdução Didática</a></li>
+                    <li><a href="#entendendo">Entendendo a Perda de Carga</a></li>
+                    <li><a href="#distribuida">Perda de Carga Distribuída</a></li>
+                    <li><a href="#localizada">Perda de Carga Localizada</a></li>
+                    <li><a href="#metodo">Método dos Comprimentos Equivalentes</a></li>
+                    <li><a href="#tabelas">Tabelas NBR 5626:1998</a></li>
+                    <li><a href="#aplicacao">Aplicação Prática Completa</a></li>
+                    <li><a href="#exercicios">Exercícios Resolvidos</a></li>
+                    <li><a href="#outras_perdas">Outras Perdas Localizadas</a></li>
+                    <li><a href="#conclusoes">Conclusões e Dicas</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container">
+        
+            <section id="introducao" class="content-section">
+                <h2>Introdução Didática</h2>
+                <h3>🏠 Imagine Sua Casa Como Um Sistema Circulatório</h3>
+                <p>Pense na tubulação de água da sua casa como o sistema circulatório do corpo humano:</p>
+                <ul>
+                    <li>O reservatório = coração (bombeia a água)</li>
+                    <li>As tubulações = artérias e veias (conduzem a água)</li>
+                    <li>As torneiras = capilares (pontos de consumo)</li>
+                </ul>
+                <p>Assim como o sangue perde energia ao circular pelo corpo devido ao atrito com as paredes dos vasos, a água também perde energia (pressão) ao fluir pelas tubulações.</p>
+                
+                <h3>🔋 O que é "Perda de Carga"?</h3>
+                <p>Perda de carga é a energia que a água "gasta" para vencer os obstáculos durante seu caminho. É como subir uma escada - você gasta energia a cada degrau!</p>
+                <div class="highlight-box">
+                    <h4>Analogia Prática: 🚗</h4>
+                    <ul>
+                        <li>Dirigir em estrada reta e lisa = perda distribuída (pouco gasto de combustível)</li>
+                        <li>Passar por lombadas e curvas = perda localizada (mais gasto de combustível)</li>
+                    </ul>
+                </div>
+
+                <h3>📊 Por que Isso é Importante?</h3>
+                <ul>
+                    <li>✅ Dimensionar bombas adequadamente</li>
+                    <li>✅ Garantir pressão nas torneiras mais distantes</li>
+                    <li>✅ Economizar energia no bombeamento</li>
+                    <li>✅ Evitar tubulações subdimensionadas</li>
+                </ul>
+            </section>
+            
+            <section id="entendendo" class="content-section">
+                <h2>Entendendo a Perda de Carga</h2>
+                <h3>🔍 Os Dois Tipos de Perda</h3>
+                <h4>1. Perda de Carga Distribuída (Contínua) 📏</h4>
+                <p><strong>O que é?</strong> A energia que a água perde ao esfregar nas paredes internas da tubulação ao longo de todo o trajeto.</p>
+                <div class="highlight-box">
+                    <p><strong>Analogia:</strong> É como uma pessoa caminhando na areia da praia - a cada passo ela gasta energia devido ao atrito, e quanto mais longe andar, mais cansada fica.</p>
+                </div>
+                <p><strong>Depende de:</strong></p>
+                <ul>
+                    <li>📏 Comprimento da tubulação (mais longo = mais perda)</li>
+                    <li>🚰 Vazão da água (mais vazão = mais perda)</li>
+                    <li>📐 Diâmetro do tubo (menor diâmetro = mais perda)</li>
+                    <li>🧱 Rugosidade do material (mais rugoso = mais perda)</li>
+                </ul>
+
+                <h4>2. Perda de Carga Localizada (Singular) 📍</h4>
+                <p><strong>O que é?</strong> A energia que a água perde ao passar por obstáculos pontuais como curvas, válvulas e conexões.</p>
+                <div class="highlight-box">
+                    <p><strong>Analogia:</strong> É como uma pessoa passando por catracas de estádio - a cada catraca ela precisa fazer um esforço extra, independente da distância percorrida.</p>
+                </div>
+                <p><strong>Principais "obstáculos":</strong></p>
+                <ul>
+                    <li>🔄 Curvas e joelhos (mudam direção do fluxo)</li>
+                    <li>🚰 Válvulas e registros (controlam o fluxo)</li>
+                    <li>📏 Reduções (mudam diâmetro)</li>
+                    <li>🔀 Tês e derivações (dividem o fluxo)</li>
+                </ul>
+                
+                <h3>💡 Conceito-Chave: Por que usar Comprimentos Equivalentes?</h3>
+                <p><strong>Problema tradicional:</strong> Calcular cada perda localizada separadamente é complicado e propenso a erros.</p>
+                <p><strong>Solução inteligente:</strong> Transformar cada obstáculo em um "comprimento de tubo reto" que causaria a mesma perda!</p>
+                <p><strong>Vantagem:</strong> Podemos somar tudo e usar uma única fórmula para o cálculo total.</p>
+            </section>
+
+            <section id="distribuida" class="content-section">
+                <h2>Perda de Carga Distribuída - NBR 5626</h2>
+                <h3>📐 Fórmulas da Norma Brasileira</h3>
+                <p>A NBR 5626:1998 estabelece fórmulas específicas conforme o tipo de material:</p>
+                <h4>🔧 Para Tubos RUGOSOS (Aço Galvanizado, Ferro)</h4>
+                <pre><code>J = 20,2 × 10⁶ × Q^1,88 × d^-4,88</code></pre>
+                
+                <h4>🔧 Para Tubos LISOS (PVC, PEAD, Cobre)</h4>
+                <pre><code>J = 8,69 × 10⁶ × Q^1,75 × d^-4,75</code></pre>
+
+                <p><strong>Onde:</strong></p>
+                <ul>
+                    <li><strong>J</strong> = perda de carga unitária (kPa/m)</li>
+                    <li><strong>Q</strong> = vazão (L/s)</li>
+                    <li><strong>d</strong> = diâmetro interno (mm)</li>
+                </ul>
+
+                <h3>🔄 Perda de Carga Total Distribuída</h3>
+                <pre><code>hf(distribuída) = J × L</code></pre>
+                <p><strong>Onde:</strong></p>
+                <ul>
+                    <li><strong>L</strong> = comprimento real da tubulação (m)</li>
+                </ul>
+                
+                <h3>💡 Entendendo as Diferenças</h3>
+                <p><strong>Por que fórmulas diferentes?</strong></p>
+                <ul>
+                    <li>Tubos rugosos têm mais atrito = perda maior</li>
+                    <li>Tubos lisos têm menos atrito = perda menor</li>
+                    <li>A diferença pode chegar a 50% no mesmo sistema!</li>
+                </ul>
+                
+                <h4>Materiais por categoria:</h4>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tubos RUGOSOS</th>
+                                <th>Tubos LISOS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Aço galvanizado</td>
+                                <td>PVC soldável</td>
+                            </tr>
+                            <tr>
+                                <td>Aço carbono</td>
+                                <td>PEAD</td>
+                            </tr>
+                            <tr>
+                                <td>Ferro galvanizado</td>
+                                <td>Cobre</td>
+                            </tr>
+                            <tr>
+                                <td>Ferro fundido</td>
+                                <td>Liga de cobre</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <section id="localizada" class="content-section">
+                <h2>Perda de Carga Localizada</h2>
+                <h3>🎯 O Desafio das Singularidades</h3>
+                <p>Cada peça especial causa uma perturbação no fluxo da água:</p>
+                <ul>
+                    <li><strong>🔄 Curvas e Joelhos:</strong> Forçam a água a mudar de direção, criam turbulência e vórtices. Quanto menor o raio da curva, maior a perda.</li>
+                    <li><strong>🚰 Válvulas e Registros:</strong> Estrangulam a passagem da água. Válvula globo é muito restritiva, enquanto a válvula gaveta é pouco restritiva.</li>
+                    <li><strong>📏 Reduções:</strong> Aceleram a água (menor área = maior velocidade) e causam turbulência na transição.</li>
+                    <li><strong>🔀 Tês e Derivações:</strong> Dividem o fluxo da água. A saída lateral é muito restritiva, e a passagem direta é pouco restritiva.</li>
+                </ul>
+
+                <h3>⚠️ Por que NÃO usar a fórmula tradicional?</h3>
+                <p>A fórmula tradicional <code>hf = K × (V²/2g)</code> apresenta os seguintes problemas:</p>
+                <ul>
+                    <li>❌ Precisa calcular a velocidade para cada diâmetro.</li>
+                    <li>❌ É incompatível com as fórmulas da NBR 5626.</li>
+                    <li>❌ Aumenta as chances de erro nos cálculos.</li>
+                    <li>❌ Dificulta a automação em planilhas.</li>
+                </ul>
+            </section>
+
+            <section id="metodo" class="content-section">
+                <h2>Método dos Comprimentos Equivalentes</h2>
+                <h3>🧠 A Ideia Genial</h3>
+                <p><strong>Pergunta:</strong> E se pudéssemos transformar cada curva, válvula ou tê em um "pedaço de tubo reto" que causasse a mesma perda de carga?</p>
+                <p><strong>Resposta:</strong> Isso é exatamente o método dos comprimentos equivalentes!</p>
+                
+                <h3>📝 Como Funciona na Prática</h3>
+                <h4>Passo 1: Inventário do Sistema 📋</h4>
+                <p>Faça uma lista de todas as peças especiais. Por exemplo:</p>
+                <pre>
+Sistema exemplo:
+- 1 entrada do reservatório
+- 3 joelhos 90°  
+- 1 válvula gaveta
+- 1 tê passagem direta
+- 1 registro de gaveta</pre>
+
+                <h4>Passo 2: Consulta às Tabelas 📊</h4>
+                <p>Para cada peça, encontre seu comprimento equivalente na tabela da NBR 5626. Para DN 25, por exemplo:</p>
+                <ul>
+                    <li>Entrada = 0,4 m</li>
+                    <li>3 joelhos = 3 × 1,7 = 5,1 m</li>
+                    <li>Válvula gaveta = 0,2 m</li>
+                    <li>Tê passagem = 0,6 m</li>
+                    <li>Registro gaveta = 0,2 m</li>
+                </ul>
+                
+                <h4>Passo 3: Soma Total ➕</h4>
+                <pre>
+Comprimento equivalente total = 0,4 + 5,1 + 0,2 + 0,6 + 0,2 = 6,5 m
+Comprimento real da tubulação = 25,0 m
+<strong>COMPRIMENTO TOTAL = 25,0 + 6,5 = 31,5 m</strong></pre>
+
+                <h4>Passo 4: Aplicação da Fórmula 🧮</h4>
+                <p>Use o comprimento total na fórmula da NBR 5626 (para tubo liso):</p>
+                <pre><code>J = 8,69 × 10⁶ × Q^1,75 × d^-4,75</code>
+<code>hf = J × 31,5 m</code></pre>
+                
+                <h3>✅ Vantagens do Método</h3>
+                <ul>
+                    <li><strong>🎯 Simplicidade:</strong> Uma única fórmula para tudo.</li>
+                    <li><strong>🔧 Compatibilidade:</strong> Funciona com qualquer método de cálculo.</li>
+                    <li><strong>📊 Facilita planilhas:</strong> Ideal para automação.</li>
+                    <li><strong>⚡ Rapidez:</strong> Cálculo direto sem conversões.</li>
+                    <li><strong>🎯 Precisão:</strong> Baseado em dados experimentais.</li>
+                </ul>
+            </section>
+            
+            <section id="tabelas" class="content-section">
+                <h2>Tabelas NBR 5626:1998</h2>
+                <h3>📊 COMPRIMENTOS EQUIVALENTES - TUBOS RUGOSOS</h3>
+                <p>(Aço galvanizado, ferro galvanizado, aço carbono)</p>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Peça</th><th>DN 15</th><th>DN 20</th><th>DN 25</th><th>DN 32</th><th>DN 40</th><th>DN 50</th><th>DN 60</th><th>DN 75</th><th>DN 100</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Entrada de borda</strong></td><td>0,6</td><td>0,8</td><td>1,0</td><td>1,3</td><td>1,6</td><td>2,1</td><td>2,4</td><td>3,0</td><td>4,1</td></tr>
+                            <tr><td><strong>Entrada normal</strong></td><td>0,3</td><td>0,4</td><td>0,5</td><td>0,6</td><td>0,8</td><td>1,0</td><td>1,2</td><td>1,5</td><td>2,0</td></tr>
+                            <tr><td><strong>Saída de canalização</strong></td><td>0,4</td><td>0,5</td><td>0,6</td><td>0,8</td><td>1,0</td><td>1,3</td><td>1,5</td><td>1,9</td><td>2,5</td></tr>
+                            <tr><td><strong>Joelho 90°</strong></td><td>1,3</td><td>1,7</td><td>2,2</td><td>2,8</td><td>3,5</td><td>4,6</td><td>5,3</td><td>6,7</td><td>8,9</td></tr>
+                            <tr><td><strong>Joelho 45°</strong></td><td>0,7</td><td>0,9</td><td>1,1</td><td>1,4</td><td>1,8</td><td>2,3</td><td>2,7</td><td>3,4</td><td>4,5</td></tr>
+                            <tr><td><strong>Curva 90°</strong></td><td>0,5</td><td>0,6</td><td>0,8</td><td>1,0</td><td>1,3</td><td>1,7</td><td>1,9</td><td>2,4</td><td>3,2</td></tr>
+                            <tr><td><strong>Curva 45°</strong></td><td>0,2</td><td>0,3</td><td>0,4</td><td>0,5</td><td>0,6</td><td>0,8</td><td>1,0</td><td>1,2</td><td>1,6</td></tr>
+                            <tr><td><strong>Tê, passagem direta</strong></td><td>0,4</td><td>0,6</td><td>0,7</td><td>0,9</td><td>1,1</td><td>1,5</td><td>1,7</td><td>2,1</td><td>2,8</td></tr>
+                            <tr><td><strong>Tê, saída de lado</strong></td><td>1,8</td><td>2,4</td><td>3,0</td><td>3,8</td><td>4,8</td><td>6,4</td><td>7,3</td><td>9,1</td><td>12,2</td></tr>
+                            <tr><td><strong>Tê, saída bilateral</strong></td><td>2,7</td><td>3,6</td><td>4,5</td><td>5,7</td><td>7,2</td><td>9,5</td><td>11,0</td><td>13,7</td><td>18,3</td></tr>
+                            <tr><td><strong>Válvula de gaveta</strong></td><td>0,1</td><td>0,2</td><td>0,2</td><td>0,3</td><td>0,4</td><td>0,5</td><td>0,6</td><td>0,7</td><td>1,0</td></tr>
+                            <tr><td><strong>Válvula globo</strong></td><td>5,1</td><td>6,8</td><td>8,5</td><td>10,8</td><td>13,5</td><td>17,9</td><td>20,6</td><td>25,8</td><td>34,4</td></tr>
+                            <tr><td><strong>Válvula de retenção</strong></td><td>2,6</td><td>3,4</td><td>4,3</td><td>5,4</td><td>6,8</td><td>9,0</td><td>10,3</td><td>12,9</td><td>17,2</td></tr>
+                            <tr><td><strong>Redução gradual</strong></td><td>0,1</td><td>0,1</td><td>0,2</td><td>0,2</td><td>0,3</td><td>0,4</td><td>0,4</td><td>0,5</td><td>0,7</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>📊 COMPRIMENTOS EQUIVALENTES - TUBOS LISOS</h3>
+                <p>(PVC, PEAD, cobre, liga de cobre)</p>
+                <div class="table-container">
+                     <table>
+                        <thead>
+                            <tr><th>Peça</th><th>DN 15</th><th>DN 20</th><th>DN 25</th><th>DN 32</th><th>DN 40</th><th>DN 50</th><th>DN 60</th><th>DN 75</th><th>DN 100</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Entrada de borda</strong></td><td>0,5</td><td>0,6</td><td>0,8</td><td>1,0</td><td>1,2</td><td>1,6</td><td>1,9</td><td>2,4</td><td>3,2</td></tr>
+                            <tr><td><strong>Entrada normal</strong></td><td>0,2</td><td>0,3</td><td>0,4</td><td>0,5</td><td>0,6</td><td>0,8</td><td>0,9</td><td>1,2</td><td>1,6</td></tr>
+                            <tr><td><strong>Saída de canalização</strong></td><td>0,3</td><td>0,4</td><td>0,5</td><td>0,6</td><td>0,8</td><td>1,0</td><td>1,2</td><td>1,5</td><td>2,0</td></tr>
+                            <tr><td><strong>Joelho 90°</strong></td><td>1,0</td><td>1,3</td><td>1,7</td><td>2,1</td><td>2,7</td><td>3,5</td><td>4,1</td><td>5,1</td><td>6,8</td></tr>
+                            <tr><td><strong>Joelho 45°</strong></td><td>0,5</td><td>0,7</td><td>0,8</td><td>1,1</td><td>1,3</td><td>1,7</td><td>2,0</td><td>2,6</td><td>3,4</td></tr>
+                            <tr><td><strong>Curva 90°</strong></td><td>0,4</td><td>0,5</td><td>0,6</td><td>0,8</td><td>1,0</td><td>1,3</td><td>1,5</td><td>1,9</td><td>2,5</td></tr>
+                            <tr><td><strong>Curva 45°</strong></td><td>0,2</td><td>0,2</td><td>0,3</td><td>0,4</td><td>0,5</td><td>0,6</td><td>0,7</td><td>0,9</td><td>1,2</td></tr>
+                            <tr><td><strong>Tê, passagem direta</strong></td><td>0,3</td><td>0,4</td><td>0,6</td><td>0,7</td><td>0,9</td><td>1,1</td><td>1,3</td><td>1,7</td><td>2,2</td></tr>
+                            <tr><td><strong>Tê, saída de lado</strong></td><td>1,4</td><td>1,8</td><td>2,3</td><td>2,9</td><td>3,7</td><td>4,8</td><td>5,6</td><td>7,0</td><td>9,3</td></tr>
+                            <tr><td><strong>Tê, saída bilateral</strong></td><td>2,1</td><td>2,7</td><td>3,4</td><td>4,4</td><td>5,5</td><td>7,2</td><td>8,4</td><td>10,5</td><td>14,0</td></tr>
+                            <tr><td><strong>Válvula de gaveta</strong></td><td>0,1</td><td>0,1</td><td>0,2</td><td>0,2</td><td>0,3</td><td>0,4</td><td>0,4</td><td>0,5</td><td>0,7</td></tr>
+                            <tr><td><strong>Válvula globo</strong></td><td>3,9</td><td>5,1</td><td>6,5</td><td>8,2</td><td>10,3</td><td>13,6</td><td>15,7</td><td>19,6</td><td>26,2</td></tr>
+                            <tr><td><strong>Válvula de retenção</strong></td><td>2,0</td><td>2,6</td><td>3,3</td><td>4,1</td><td>5,2</td><td>6,8</td><td>7,9</td><td>9,8</td><td>13,1</td></tr>
+                            <tr><td><strong>Redução gradual</strong></td><td>0,1</td><td>0,1</td><td>0,1</td><td>0,2</td><td>0,2</td><td>0,3</td><td>0,3</td><td>0,4</td><td>0,5</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>📋 DIÂMETROS INTERNOS DE REFERÊNCIA</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>DN (mm)</th><th>PVC Soldável (mm)</th><th>PEAD PN 10 (mm)</th><th>PEAD PN 16 (mm)</th><th>Aço Galv. (mm)</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>15</td><td>13,8</td><td>12,2</td><td>10,8</td><td>12,5</td></tr>
+                            <tr><td>20</td><td>16,6</td><td>16,2</td><td>14,4</td><td>15,8</td></tr>
+                            <tr><td>25</td><td>21,6</td><td>20,4</td><td>18,2</td><td>20,9</td></tr>
+                            <tr><td>32</td><td>27,8</td><td>26,0</td><td>23,2</td><td>26,6</td></tr>
+                            <tr><td>40</td><td>35,2</td><td>32,6</td><td>29,0</td><td>35,1</td></tr>
+                            <tr><td>50</td><td>43,8</td><td>40,8</td><td>36,2</td><td>42,9</td></tr>
+                            <tr><td>60</td><td>53,4</td><td>49,0</td><td>43,6</td><td>52,5</td></tr>
+                            <tr><td>75</td><td>66,6</td><td>61,4</td><td>54,6</td><td>66,7</td></tr>
+                            <tr><td>100</td><td>88,8</td><td>81,8</td><td>72,8</td><td>102,3</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <section id="aplicacao" class="content-section">
+                <h2>Aplicação Prática Completa</h2>
+                <h3>🏢 Estudo de Caso: Instalação Predial</h3>
+                <p><strong>Sistema a ser calculado:</strong></p>
+                <ul>
+                    <li>Prédio residencial - alimentação de apartamento no 3º andar</li>
+                    <li>Material: PVC soldável DN 25</li>
+                    <li>Vazão: Q = 0,42 L/s (estimativa NBR 5626)</li>
+                    <li>Comprimento real: L = 18,5 m (vertical + horizontal)</li>
+                </ul>
+
+                <h3>📋 Inventário das Peças Especiais:</h3>
+                <ol>
+                    <li>1 entrada normal (saída do reservatório)</li>
+                    <li>1 curva 90° (mudança de direção na descida)</li>
+                    <li>2 joelhos 90° (entrada no apartamento)</li>
+                    <li>1 tê passagem direta (alimentação do banheiro)</li>
+                    <li>1 válvula gaveta (registro geral do apartamento)</li>
+                    <li>1 redução gradual (DN 25 → DN 20 no final)</li>
+                </ol>
+
+                <h3>🔍 Aplicação Passo a Passo:</h3>
+                <h4>Passo 1: Escolha da Fórmula</h4>
+                <p>Material = PVC (tubo liso). Logo, usamos a fórmula:</p>
+                <pre><code>J = 8,69 × 10⁶ × Q^1,75 × d^-4,75</code></pre>
+                
+                <h4>Passo 2: Comprimentos Equivalentes (Tabela Tubos Lisos - DN 25)</h4>
+                <div class="table-container">
+                     <table>
+                        <thead>
+                            <tr><th>Peça</th><th>Quantidade</th><th>Leq Unitário (m)</th><th>Leq Total (m)</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Entrada normal</td><td>1</td><td>0,4</td><td>0,4</td></tr>
+                            <tr><td>Curva 90°</td><td>1</td><td>0,6</td><td>0,6</td></tr>
+                            <tr><td>Joelho 90°</td><td>2</td><td>1,7</td><td>3,4</td></tr>
+                            <tr><td>Tê passagem direta</td><td>1</td><td>0,6</td><td>0,6</td></tr>
+                            <tr><td>Válvula gaveta</td><td>1</td><td>0,2</td><td>0,2</td></tr>
+                            <tr><td>Redução gradual</td><td>1</td><td>0,1</td><td>0,1</td></tr>
+                            <tr><td><strong>TOTAL</strong></td><td>-</td><td>-</td><td><strong>5,3 m</strong></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4>Passo 3: Comprimento Total</h4>
+                <pre>Ltotal = Lreal + ΣLeq = 18,5 + 5,3 = 23,8 m</pre>
+
+                <h4>Passo 4: Cálculo da Perda de Carga Unitária</h4>
+                <pre>
+J = 8,69 × 10⁶ × (0,42)^1,75 × (21,6)^-4,75
+J = 8,69 × 10⁶ × 0,304 × 3,89 × 10⁻⁷
+<strong>J = 1,027 kPa/m</strong></pre>
+
+                <h4>Passo 5: Perda de Carga Total</h4>
+                <pre>hf = J × Ltotal = 1,027 × 23,8 = 24,44 kPa</pre>
+                <p>Convertendo para mca (metros de coluna d'água):</p>
+                <pre>hf = 24,44 kPa ÷ 9,81 = <strong>2,49 mca</strong></pre>
+                
+                <h3>📊 Resultado Final:</h3>
+                <div class="highlight-box">
+                    <p>A perda de carga total do sistema é de <strong>2,49 metros de coluna d'água</strong>.</p>
+                </div>
+
+                <h3>💡 Interpretação Prática:</h3>
+                <ul>
+                    <li><strong>Pressão necessária:</strong> A bomba/reservatório deve fornecer pelo menos 2,49 mca só para vencer as perdas de carga.</li>
+                    <li><strong>Pressão residual:</strong> Ainda é necessário somar a pressão mínima desejada na torneira (ex: 1,0 mca).</li>
+                    <li><strong>Altura geométrica:</strong> Altura entre reservatório e ponto de consumo.</li>
+                    <li><strong>Pressão total necessária:</strong> Altura geométrica + perdas + pressão residual.</li>
+                </ul>
+            </section>
+            
+             <section id="exercicios" class="content-section">
+                <h2>Exercícios Resolvidos</h2>
+
+                <h3>📚 Exercício 1: Residência Térrea - Sistema PVC</h3>
+                <p><strong>Enunciado:</strong> Calcule a perda de carga em uma residência térrea com sistema em PVC com Diâmetro DN 20, Vazão Q = 0,30 L/s, Comprimento 8,0 m e as seguintes peças: 1 entrada normal, 4 joelhos 90°, 1 válvula gaveta.</p>
+                <h4>Resolução:</h4>
+                <p><strong>Dados:</strong></p>
+                <ul>
+                    <li>Material: PVC (tubo liso)</li>
+                    <li>d = 16,6 mm (diâmetro interno DN 20)</li>
+                    <li>Q = 0,30 L/s</li>
+                    <li>L = 8,0 m</li>
+                </ul>
+                <p><strong>Comprimentos equivalentes (Tabela Tubos Lisos - DN 20):</strong></p>
+                <ul>
+                    <li>1 entrada normal: 1 × 0,3 = 0,3 m</li>
+                    <li>4 joelhos 90°: 4 × 1,3 = 5,2 m</li>
+                    <li>1 válvula gaveta: 1 × 0,1 = 0,1 m</li>
+                    <li><strong>Total Leq = 5,6 m</strong></li>
+                </ul>
+                <p><strong>Comprimento total:</strong> Ltotal = 8,0 + 5,6 = 13,6 m</p>
+                <p><strong>Perda de carga unitária:</strong></p>
+                <pre>
+J = 8,69 × 10⁶ × (0,30)^1,75 × (16,6)^-4,75
+J = 1,616 kPa/m</pre>
+                <p><strong>Perda de carga total:</strong></p>
+                <pre>hf = 1,616 × 13,6 = 21,98 kPa = 2,24 mca</pre>
+                <div class="highlight-box"><p><strong>Resposta:</strong> 2,24 metros de coluna d'água.</p></div>
+
+                <h3>📚 Exercício 2: Barrilete Predial - Sistema Aço Galvanizado</h3>
+                <p><strong>Enunciado:</strong> Dimensione a perda de carga no barrilete de um edifício com Material Aço galvanizado DN 40, Vazão Q = 1,8 L/s, Comprimento 15,0 m e as seguintes peças: 1 entrada de borda, 2 tês passagem direta, 6 joelhos 90°, 3 válvulas gaveta.</p>
+                <h4>Resolução:</h4>
+                <p><strong>Dados:</strong></p>
+                <ul>
+                    <li>Material: Aço galvanizado (tubo rugoso)</li>
+                    <li>d = 35,1 mm</li>
+                    <li>Q = 1,8 L/s</li>
+                    <li>L = 15,0 m</li>
+                </ul>
+                <p><strong>Comprimentos equivalentes (Tabela Tubos Rugosos - DN 40):</strong></p>
+                <ul>
+                    <li>1 entrada de borda: 1 × 1,6 = 1,6 m</li>
+                    <li>2 tês passagem direta: 2 × 1,1 = 2,2 m</li>
+                    <li>6 joelhos 90°: 6 × 3,5 = 21,0 m</li>
+                    <li>3 válvulas gaveta: 3 × 0,4 = 1,2 m</li>
+                    <li><strong>Total Leq = 26,0 m</strong></li>
+                </ul>
+                <p><strong>Comprimento total:</strong> Ltotal = 15,0 + 26,0 = 41,0 m</p>
+                <p><strong>Perda de carga unitária:</strong></p>
+                <pre>
+J = 20,2 × 10⁶ × (1,8)^1,88 × (35,1)^-4,88
+J = 0,590 kPa/m</pre>
+                <p><strong>Perda de carga total:</strong></p>
+                <pre>hf = 0,590 × 41,0 = 24,19 kPa = 2,47 mca</pre>
+                <div class="highlight-box"><p><strong>Resposta:</strong> 2,47 metros de coluna d'água.</p></div>
+
+                <h3>📚 Exercício 3: Sistema Misto - PEAD PN 16</h3>
+                <p><strong>Enunciado:</strong> Calcule a perda de carga em uma rede externa em PEAD com Diâmetro DN 50 PN 16, Vazão Q = 2,5 L/s, Comprimento 35 m e as seguintes peças: 1 entrada normal, 3 curvas 90°, 1 tê saída lateral, 2 válvulas gaveta, 1 válvula de retenção.</p>
+                <h4>Resolução:</h4>
+                <p><strong>Dados:</strong></p>
+                <ul>
+                    <li>Material: PEAD (tubo liso)</li>
+                    <li>d = 36,2 mm (PEAD PN 16, DN 50)</li>
+                    <li>Q = 2,5 L/s</li>
+                    <li>L = 35,0 m</li>
+                </ul>
+                <p><strong>Comprimentos equivalentes (Tabela Tubos Lisos - DN 50):</strong></p>
+                <ul>
+                    <li>1 entrada normal: 1 × 0,8 = 0,8 m</li>
+                    <li>3 curvas 90°: 3 × 1,3 = 3,9 m</li>
+                    <li>1 tê saída lateral: 1 × 4,8 = 4,8 m</li>
+                    <li>2 válvulas gaveta: 2 × 0,4 = 0,8 m</li>
+                    <li>1 válvula retenção: 1 × 6,8 = 6,8 m</li>
+                    <li><strong>Total Leq = 17,1 m</strong></li>
+                </ul>
+                <p><strong>Comprimento total:</strong> Ltotal = 35,0 + 17,1 = 52,1 m</p>
+                <p><strong>Perda de carga unitária:</strong></p>
+                <pre>
+J = 8,69 × 10⁶ × (2,5)^1,75 × (36,2)^-4,75
+J = 1,511 kPa/m</pre>
+                <p><strong>Perda de carga total:</strong></p>
+                <pre>hf = 1,511 × 52,1 = 78,72 kPa = 8,03 mca</pre>
+                <div class="highlight-box"><p><strong>Resposta:</strong> 8,03 metros de coluna d'água.</p></div>
+            </section>
+            
+            <section id="outras_perdas" class="content-section">
+                <h2>Outras Perdas Localizadas</h2>
+                <h3>🔧 Perda de Carga em Registros</h3>
+                <p>A NBR 5626:1998 também fornece fórmula específica para registros de pressão:</p>
+                <pre><code>Δh = 8 × 10⁶ × K × Q² × π⁻² × d⁻⁴</code></pre>
+                <p><strong>Onde:</strong></p>
+                <ul>
+                    <li><strong>Δh</strong> = perda de carga no registro (kPa)</li>
+                    <li><strong>K</strong> = coeficiente do registro (fornecido pelo fabricante)</li>
+                    <li><strong>Q</strong> = vazão (L/s)</li>
+                    <li><strong>d</strong> = diâmetro interno (mm)</li>
+                </ul>
+
+                <h3>💧 Perda de Carga em Hidrômetros</h3>
+                <p>Para hidrômetros, a norma especifica:</p>
+                <pre><code>Δh = (36 × Q)² × (Qmáx)⁻²</code></pre>
+                <p><strong>Onde:</strong></p>
+                <ul>
+                    <li><strong>Δh</strong> = perda de carga no hidrômetro (kPa)</li>
+                    <li><strong>Q</strong> = vazão de cálculo (L/s)</li>
+                    <li><strong>Qmáx</strong> = vazão máxima do hidrômetro (m³/h)</li>
+                </ul>
+
+                <h4>📋 Exemplo Prático - Registro:</h4>
+                <p><strong>Dados:</strong> Registro DN 25, K = 0,5; Vazão Q = 0,4 L/s; Diâmetro d = 21,6 mm.</p>
+                <p><strong>Cálculo:</strong></p>
+                <pre>
+Δh = 8 × 10⁶ × 0,5 × (0,4)² × π⁻² × (21,6)⁻⁴
+Δh = 3,00 kPa = 0,31 mca</pre>
+                
+                <h4>📋 Exemplo Prático - Hidrômetro:</h4>
+                <p><strong>Dados:</strong> Hidrômetro Qmáx = 3,0 m³/h; Vazão Q = 0,4 L/s.</p>
+                <p><strong>Cálculo:</strong></p>
+                <pre>
+Δh = (36 × 0,4)² × (3,0)⁻²
+Δh = 23,0 kPa = 2,35 mca</pre>
+            </section>
+
+            <section id="conclusoes" class="content-section">
+                <h2>Conclusões e Dicas</h2>
+                <h3>🎯 Principais Benefícios do Método</h3>
+                <ul>
+                    <li><strong>✅ Simplicidade Operacional:</strong> Uma única aplicação da fórmula da NBR 5626, elimina cálculos intermediários e facilita a verificação.</li>
+                    <li><strong>✅ Precisão Adequada:</strong> Baseado em dados experimentais da norma brasileira e adequado para projetos de engenharia.</li>
+                    <li><strong>✅ Facilidade de Automatização:</strong> Ideal para planilhas eletrônicas e softwares, reduzindo o tempo de projeto.</li>
+                    <li><strong>✅ Padronização Nacional:</strong> Uniformiza critérios entre projetistas e facilita a aprovação de projetos.</li>
+                </ul>
+                
+                <h3>⚠️ Cuidados e Limitações</h3>
+                <ul>
+                    <li><strong>Regime de Escoamento:</strong> As fórmulas são válidas para regime turbulento.</li>
+                    <li><strong>Faixa de Aplicação:</strong> Aplicam-se diretamente à água fria. Água quente e outros fluidos exigem correções.</li>
+                    <li><strong>Degradação ao Longo do Tempo:</strong> Tubos rugosos podem aumentar a rugosidade com o tempo. A manutenção é importante.</li>
+                </ul>
+
+                <h3>🔍 Dicas Práticas para Estudantes</h3>
+                <h4>📝 Durante os Cálculos:</h4>
+                <ul>
+                    <li>Sempre identifique primeiro o tipo de material (rugoso ou liso).</li>
+                    <li>Confira o diâmetro interno correto na tabela.</li>
+                    <li>Some todos os comprimentos equivalentes antes de calcular.</li>
+                    <li>Verifique as unidades (kPa → mca: dividir por 9,81).</li>
+                </ul>
+                
+                <h4>🎯 Para Projetos Reais:</h4>
+                <ul>
+                    <li>Considere a pressão residual mínima (ex: 1,0 mca).</li>
+                    <li>Some a altura geométrica.</li>
+                    <li>Preveja margem para futuras ampliações.</li>
+                    <li>Documente todas as premissas adotadas.</li>
+                </ul>
+                
+                <h4>💡 Erros Comuns a Evitar:</h4>
+                <ul>
+                    <li>❌ Usar tabela errada (rugoso × liso).</li>
+                    <li>❌ Esquecer de somar os comprimentos equivalentes.</li>
+                    <li>❌ Confundir diâmetro nominal com diâmetro interno.</li>
+                    <li>❌ Misturar unidades (kPa, mca, bar).</li>
+                </ul>
+
+                <h3>📚 Próximos Passos no Aprendizado</h3>
+                <p><strong>Nível Intermediário:</strong> Análise de redes malhadas (Hardy-Cross), dimensionamento econômico, sistemas de recalque.</p>
+                <p><strong>Nível Avançado:</strong> Softwares de simulação (EPANET, WaterCAD), análise de transitórios (golpe de aríete), sistemas de água quente.</p>
+                
+                <h3>📖 Referências Complementares</h3>
+                <ul>
+                    <li>NBR 5626:1998 - Instalação predial de água fria</li>
+                    <li>NBR 7198 - Projeto e execução de instalações prediais de água quente</li>
+                    <li>NBR 12218 - Projeto de rede de distribuição de água para abastecimento público</li>
+                    <li>Livros técnicos de hidráulica predial e urbana</li>
+                </ul>
+
+                <h3>💭 Reflexão Final</h3>
+                <div class="highlight-box">
+                    <p>"O método dos comprimentos equivalentes é uma ferramenta poderosa que simplifica cálculos complexos sem perder precisão. Dominar essa técnica é fundamental para qualquer profissional que trabalhe com sistemas hidráulicos."</p>
+                </div>
+                
+                <h3>🚀 Desafio para Praticar</h3>
+                <p>Aplique os conhecimentos adquiridos em um projeto real:</p>
+                <ul>
+                    <li>Meça sua própria residência.</li>
+                    <li>Identifique todas as peças especiais.</li>
+                    <li>Calcule a perda de carga total.</li>
+                    <li>Compare com a pressão disponível.</li>
+                </ul>
+                <p><strong>Lembre-se: A prática consolida o aprendizado! 💪</strong></p>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 - Material Didático baseado na NBR 5626:1998</p>
+        <p>Desenvolvido para disciplinas de Hidráulica e Instalações Hidrossanitárias</p>
+    </footer>
+
+</body>
+</html>
